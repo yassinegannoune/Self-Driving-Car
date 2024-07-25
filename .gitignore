@@ -1,0 +1,54 @@
+
+# Environment variables
+.env
+
+# Python specific
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+dist/
+build/
+env/
+venv/
+ENV/
+*.pyo
+*.pyd
+
+
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Package directories
+*.tar.gz
+*.zip
+*.tar
+
+# IDEs and editors
+.idea/
+.vscode/
+*.sublime-workspace
+
+# Database
+*.sqlite3
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# Ignoring API keys and sensitive data
+keys.json
+
+
+# Ignore specific .csv files
+data_testing/*
+data_training/*
+# Add more specific .csv files as needed
+
+
