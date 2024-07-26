@@ -7,16 +7,6 @@ from load_data import generate_data_batch, split_train_val
 
 
 def get_nvidia_model(summary=True):
-    """
-    Get the keras Model corresponding to the NVIDIA architecture described in:
-    Bojarski, Mariusz, et al. "End to end learning for self-driving cars."
-
-    The paper describes the network architecture but doesn't go into details for some aspects.
-    Input normalization, as well as ELU activations are just my personal implementation choice.
-
-    :param summary: show model summary
-    :return: keras Model of NVIDIA architecture
-    """
     init = 'glorot_uniform'
 
     if K.backend() == 'theano':
@@ -26,7 +16,6 @@ def get_nvidia_model(summary=True):
 
     # standardize input
     x = Lambda(lambda z: z / 127.5 - 1.)(input_frame)
-
     x = Convolution2D(24, 5, 5, border_mode='valid', subsample=(2, 2), init=init)(x)
     x = ELU()(x)
     x = Dropout(0.2)(x)
@@ -54,29 +43,18 @@ def get_nvidia_model(summary=True):
     x = Dense(10, init=init)(x)
     x = ELU()(x)
     out = Dense(1, init=init)(x)
-
     model = Model(input=input_frame, output=out)
-
     if summary:
         model.summary()
-
     return model
 
 
 if __name__ == '__main__':
-
-    # split udacity csv data into training and validation
     train_data, val_data = split_train_val(csv_driving_data='data_training\driving_log.csv')
-
-    # get network model and compile it (default Adam opt)
     nvidia_net = get_nvidia_model(summary=True)
     nvidia_net.compile(optimizer='adam', loss='mse')
-
-    # json dump of model architecture
     with open('logs/model.json', 'w') as f:
         f.write(nvidia_net.to_json())
-
-    # define callbacks to save history and weights
     checkpointer = ModelCheckpoint('checkpoints/weights.{epoch:02d}-{val_loss:.3f}.hdf5')
     logger = CSVLogger(filename='logs/history.csv')
 
